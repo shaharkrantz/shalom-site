@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300" role="img" aria-labelledby="t d">
+  <title id="t">שלום!</title><desc id="d">דמות חייכנית מנופפת ביד לשלום.</desc>
+  <style>
+    .arm { transform-box: fill-box; transform-origin: 18% 88%; animation: wave .75s ease-in-out infinite alternate; }
+    .body { animation: bob 1.5s ease-in-out infinite; transform-origin: center bottom; }
+    @keyframes wave { from { transform: rotate(-14deg); } to { transform: rotate(24deg); } }
+    @keyframes bob { 50% { transform: translateY(-5px); } }
+    @media (prefers-reduced-motion: reduce) { .arm, .body { animation: none; } }
+  </style>
+  <ellipse cx="160" cy="277" rx="92" ry="13" fill="#e4ddf6"/>
+  <g class="body">
+    <path d="M93 269c4-60 24-92 67-92s63 32 67 92" fill="#7863cc"/>
+    <path d="M127 210h66l18 59h-102z" fill="#947fe0"/>
+    <circle cx="160" cy="112" r="68" fill="#f4bd91"/>
+    <path d="M94 111c-5-51 24-82 68-82 40 0 68 29 65 72-17-8-32-22-41-39-19 23-50 38-92 40z" fill="#382d4d"/>
+    <circle cx="137" cy="119" r="5" fill="#382d4d"/><circle cx="183" cy="119" r="5" fill="#382d4d"/>
+    <path d="M143 143q17 18 34 0" fill="none" stroke="#a94f5d" stroke-width="5" stroke-linecap="round"/>
+    <path d="M108 136q-9 8 0 16M212 136q9 8 0 16" fill="none" stroke="#e89b83" stroke-width="5" stroke-linecap="round"/>
+    <path d="M108 204q-33 20-38 55" fill="none" stroke="#f4bd91" stroke-width="18" stroke-linecap="round"/>
+    <g class="arm">
+      <path d="M212 204q31-26 46-57" fill="none" stroke="#f4bd91" stroke-width="18" stroke-linecap="round"/>
+      <path d="M255 147l-2-21m8 20 8-19m-1 23 15-13m-22 8-5-20" fill="none" stroke="#f4bd91" stroke-width="9" stroke-linecap="round"/>
+    </g>
+  </g>
+  <text x="35" y="72" font-size="27" fill="#ffac5c">✦</text><text x="265" y="95" font-size="21" fill="#ffac5c">✦</text>
+</svg>
