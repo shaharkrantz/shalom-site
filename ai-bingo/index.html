@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3c49c8"><title>בונים בינגו עם בינה מלאכותית</title>
+<style>
+:root{--ink:#202b45;--blue:#3c49c8;--gold:#ffd75e;--mint:#dcf8ed;--paper:#fffefa}*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#e8f6ff,#fff5d9);color:var(--ink);font-family:Arial,sans-serif;line-height:1.65}.wrap{max-width:850px;margin:auto;padding:26px 16px 54px}.hero{background:var(--blue);color:white;text-align:center;padding:34px 20px;border-radius:26px}.hero .icon{font-size:48px}.hero h1{font-size:clamp(2rem,7vw,3.3rem);line-height:1.15;margin:5px 0}.hero p{font-size:1.12rem;margin:12px auto 0;max-width:620px}.card{background:var(--paper);margin:20px 0;padding:22px;border-radius:20px;box-shadow:0 8px 24px #202b4512}.card h2{margin:0 0 8px}.fields{display:grid;grid-template-columns:1fr 170px;gap:14px;margin:16px 0}label{display:block;font-weight:bold;margin-bottom:5px}input,select{width:100%;font:inherit;border:2px solid #d6def2;border-radius:12px;padding:11px;background:white;color:var(--ink)}textarea{width:100%;min-height:245px;resize:vertical;font:inherit;line-height:1.6;border:2px solid #d6def2;border-radius:14px;padding:14px;background:#fbfcff;color:var(--ink)}button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:12px 18px;cursor:pointer}.primary{background:var(--blue);color:white}.primary:hover{background:#2834a3}.secondary{background:var(--gold);color:var(--ink);margin-right:8px}.note{background:var(--mint);border-radius:14px;padding:14px 16px}.tiny{font-size:.93rem;color:#526078}.status{min-height:1.5em;font-weight:bold;color:#176d48}.footer{text-align:center;color:#526078}@media(max-width:520px){.fields{grid-template-columns:1fr}.secondary{margin:10px 0 0}}
+</style></head>
+<body><main class="wrap">
+<header class="hero"><div class="icon">🤖🎱</div><h1>בונים בינגו בעזרת בינה מלאכותית!</h1><p>בוחרים נושא, מכינים הוראה מוכנה, מעתיקים ושולחים אותה אליי. אני אעזור ליצור משחק בינגו שאפשר לשחק בו.</p></header>
+<section class="card"><h2>1. בוחרים רעיון</h2><p>על מה תרצו שהבינגו יהיה? למשל: חיות, כדורגל, חלל, מאכלים או דברים שרואים בטיול.</p>
+<div class="fields"><div><label for="topic">נושא הבינגו</label><input id="topic" value="חיות" maxlength="60" placeholder="למשל: דינוזאורים"></div><div><label for="players">כמה שחקנים?</label><select id="players"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
+<label for="prompt">2. ההוראה שתשלחו לבינה המלאכותית</label><textarea id="prompt" readonly></textarea><p><button class="primary" id="copy">העתיקו את ההוראה</button><button class="secondary" id="refresh">עדכנו את ההוראה</button></p><div class="status" id="status" aria-live="polite"></div>
+</section>
+<section class="card"><h2>3. שולחים אותה בצ׳אט</h2><ol><li>לחצו על <b>״העתיקו את ההוראה״</b>.</li><li>חזרו לשיחה איתי והדביקו אותה בתיבת ההודעה.</li><li>לחצו שליחה — ואז נוכל להכין את הבינגו ביחד!</li></ol><div class="note"><b>מה ההוראה מבקשת?</b> ליצור לוחות שונים לכל השחקנים, רשימת פריטים להגרלה, כללי ניצחון והוראות פשוטות. אפשר לשנות את הנושא לפני שמעתיקים.</div></section>
+<p class="footer">אתם בוחרים את הרעיון — הבינה המלאכותית עוזרת להפוך אותו למשחק 🏆</p>
+</main>
+<script>
+const topic=document.querySelector('#topic'),players=document.querySelector('#players'),promptBox=document.querySelector('#prompt'),status=document.querySelector('#status');
+function makePrompt(){const subject=topic.value.trim()||'נושא לבחירתנו';promptBox.value=`עזור לנו להכין משחק בינגו בנושא ${subject} עבור ${players.value} שחקנים, ילדים בני 8 ו-10.\n\nאנא צור:\n1. הסבר קצר ופשוט איך משחקים.\n2. לוח בינגו שונה לכל שחקן, בגודל 5×5, עם משבצת חופשית באמצע. כתוב בכל משבצת מילה או ציור שאפשר לתאר במילים, שקשורים לנושא.\n3. רשימת פריטים להגרלה, כך שכל פריט שמופיע בלוחות יופיע גם ברשימה.\n4. כללי ניצחון ברורים: שורה, טור או אלכסון.\n5. בדוק שהלוחות שונים, שהמילים מתאימות לילדים ושאין ברשימת ההגרלה פריטים שלא מופיעים באף לוח.\n\nהצג את הלוחות בצורה מסודרת שאפשר להדפיס. אל תתחיל להגריל פריטים עד שנבקש. אם צריך לבחור משהו, שאל אותנו שאלה אחת קצרה.`;status.textContent=''}
+topic.addEventListener('input',makePrompt);players.addEventListener('change',makePrompt);document.querySelector('#refresh').addEventListener('click',makePrompt);document.querySelector('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(promptBox.value)}catch{promptBox.focus();promptBox.select();document.execCommand('copy')}status.textContent='ההוראה הועתקה! עכשיו הדביקו אותה בשיחה איתי.'});makePrompt();
+</script></body></html>
+
