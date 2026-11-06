@@ -9,15 +9,26 @@
 <body><main class="wrap">
 <header class="hero"><div class="icon">🤖🎱</div><h1>בונים בינגו בעזרת בינה מלאכותית!</h1><p>בוחרים נושא, מכינים הוראה מוכנה, מעתיקים ושולחים אותה אליי. אני אעזור ליצור משחק בינגו שאפשר לשחק בו.</p></header>
 <section class="card"><h2>1. בוחרים רעיון</h2><p>על מה תרצו שהבינגו יהיה? למשל: חיות, כדורגל, חלל, מאכלים או דברים שרואים בטיול.</p>
-<div class="fields"><div><label for="topic">נושא הבינגו</label><input id="topic" value="חיות" maxlength="60" placeholder="למשל: דינוזאורים"></div><div><label for="players">כמה שחקנים?</label><select id="players"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
+<div class="fields"><div><label for="topic">נושא הבינגו</label><input id="topic" value="חיות" maxlength="60" placeholder="למשל: דינוזאורים"></div><div><label for="players">כמה שחקנים?</label><select id="players"><option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> <option value="6">6</option> <option value="7">7</option> <option value="8">8</option> <option value="9">9</option> <option value="10">10</option> <option value="11">11</option> <option value="12">12</option> <option value="13">13</option> <option value="14">14</option> <option value="15">15</option> <option value="16">16</option> <option value="17">17</option> <option value="18">18</option> <option value="19">19</option> <option value="20">20</option> <option value="21">21</option> <option value="22">22</option> <option value="23">23</option> <option value="24">24</option> <option value="25">25</option> <option value="26" selected>26</option></select></div></div>
 <label for="prompt">2. ההוראה שתשלחו לבינה המלאכותית</label><textarea id="prompt" readonly></textarea><p><button class="primary" id="copy">העתיקו את ההוראה</button><button class="secondary" id="refresh">עדכנו את ההוראה</button></p><div class="status" id="status" aria-live="polite"></div>
 </section>
-<section class="card"><h2>3. שולחים אותה בצ׳אט</h2><ol><li>לחצו על <b>״העתיקו את ההוראה״</b>.</li><li>חזרו לשיחה איתי והדביקו אותה בתיבת ההודעה.</li><li>לחצו שליחה — ואז נוכל להכין את הבינגו ביחד!</li></ol><div class="note"><b>מה ההוראה מבקשת?</b> ליצור לוחות שונים לכל השחקנים, רשימת פריטים להגרלה, כללי ניצחון והוראות פשוטות. אפשר לשנות את הנושא לפני שמעתיקים.</div></section>
+<section class="card"><h2>3. שולחים אותה בצ׳אט</h2><ol><li>לחצו על <b>״העתיקו את ההוראה״</b>.</li><li>חזרו לשיחה איתי והדביקו אותה בתיבת ההודעה.</li><li>לחצו שליחה — ואז נוכל להכין את הבינגו ביחד!</li></ol><div class="note"><b>מה ההוראה מבקשת?</b> ליצור לוח 4×4 שונה לכל שחקן, רשימת מילים שתואמת בדיוק ללוחות, וניצחון אחרי סימון כל המשבצות. אפשר לשנות את הנושא ומספר השחקנים לפני שמעתיקים.</div></section>
 <p class="footer">אתם בוחרים את הרעיון — הבינה המלאכותית עוזרת להפוך אותו למשחק 🏆</p>
 </main>
 <script>
 const topic=document.querySelector('#topic'),players=document.querySelector('#players'),promptBox=document.querySelector('#prompt'),status=document.querySelector('#status');
-function makePrompt(){const subject=topic.value.trim()||'נושא לבחירתנו';promptBox.value=`עזור לנו להכין משחק בינגו בנושא ${subject} עבור ${players.value} שחקנים, ילדים בני 8 ו-10.\n\nאנא צור:\n1. הסבר קצר ופשוט איך משחקים.\n2. לוח בינגו שונה לכל שחקן, בגודל 5×5, עם משבצת חופשית באמצע. כתוב בכל משבצת מילה או ציור שאפשר לתאר במילים, שקשורים לנושא.\n3. רשימת פריטים להגרלה, כך שכל פריט שמופיע בלוחות יופיע גם ברשימה.\n4. כללי ניצחון ברורים: שורה, טור או אלכסון.\n5. בדוק שהלוחות שונים, שהמילים מתאימות לילדים ושאין ברשימת ההגרלה פריטים שלא מופיעים באף לוח.\n\nהצג את הלוחות בצורה מסודרת שאפשר להדפיס. אל תתחיל להגריל פריטים עד שנבקש. אם צריך לבחור משהו, שאל אותנו שאלה אחת קצרה.`;status.textContent=''}
+function makePrompt(){const subject=topic.value.trim()||'נושא לבחירתנו';promptBox.value=`עזור לנו להכין משחק בינגו בנושא ${subject} עבור ${players.value} שחקנים, לילדים בני 8 ו-10.
+
+אנא צור:
+1. הסבר קצר ופשוט איך משחקים.
+2. לוח שונה לכל שחקן, בגודל 4×4 עם 16 משבצות. כתוב בכל משבצת מילה אחת שקשורה לנושא. אל תוסיף משבצת חופשית.
+3. רשימת מילים להקראה. כל מילה שמופיעה בלוחות חייבת להופיע ברשימה, וכל מילה ברשימה חייבת להופיע בלוח אחד לפחות.
+4. כלל ניצחון ברור: מנצחים רק כשמסמנים את כל 16 המשבצות בלוח.
+5. בדוק שכל הלוחות שונים, שהמילים מתאימות לילדים, שכל לוח הוא 4×4 ושיש התאמה מלאה בין המילים בלוחות לרשימה.
+
+הצג את הלוחות בצורה מסודרת שאפשר להדפיס. אל תבחר, תגריל או תקרא מילים עד שנבקש. אם צריך לבחור משהו, שאל אותנו שאלה אחת קצרה.`;status.textContent=''}
 topic.addEventListener('input',makePrompt);players.addEventListener('change',makePrompt);document.querySelector('#refresh').addEventListener('click',makePrompt);document.querySelector('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(promptBox.value)}catch{promptBox.focus();promptBox.select();document.execCommand('copy')}status.textContent='ההוראה הועתקה! עכשיו הדביקו אותה בשיחה איתי.'});makePrompt();
 </script></body></html>
+
+
 
