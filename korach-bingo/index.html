@@ -59,6 +59,7 @@ body{margin:0;background:linear-gradient(145deg,#e9f5ff,#fff4d5);color:var(--ink
 <button class="action primary" id="generate">הכינו לוחות</button>
 <button class="action" id="printOne" disabled>הדפסת הלוח הזה</button>
 <button class="action" id="printAll" disabled>הדפסת כל הלוחות</button>
+<button class="action" id="downloadAll" disabled>הורדת כל הלוחות כקובץ</button>
 </div>
 <p class="fine">נושאים חופשיים נוצרים בעזרת הבינה המלאכותית של Cloudflare; לפרשת קורח יש רשימת מילים מוכנה ומדויקת. שימוש בבינה עשוי להיות כרוך בחיובים בחשבון Cloudflare.</p>
 <div id="status" class="status" role="status" aria-live="polite"></div>
@@ -164,7 +165,9 @@ function renderBoards(topic,words,players){
   $("#boardPickerLabel").hidden=false;
   $("#printOne").disabled=false;
   $("#printAll").disabled=false;
+  $("#downloadAll").disabled=false;
   $("#printAll").textContent="הדפסת כל "+players+" הלוחות";
+  $("#downloadAll").textContent="הורדת כל "+players+" הלוחות כקובץ";
   boardPicker.value="1";
   updateProgress(1);
 }
@@ -198,15 +201,43 @@ async function generateBoards(){
 }
 function print(mode){
   document.body.classList.add(mode);
-  window.print();
   window.addEventListener("afterprint",()=>document.body.classList.remove(mode),{once:true});
-  setTimeout(()=>document.body.classList.remove(mode),1500);
+  window.print();
+  setTimeout(()=>document.body.classList.remove(mode),5000);
+}
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+function downloadAllBoards(){
+  const cards=[...boardList.querySelectorAll(".board-card")];
+  if(!cards.length)return;
+  const topic=$("#topic").value.trim()||"בינגו";
+  const boardMarkup=cards.map(card=>{
+    const title=escapeHtml(card.querySelector(".board-title").textContent);
+    const cells=[...card.querySelectorAll(".cell")].map(cell=>'<div class="cell">'+escapeHtml(cell.textContent)+'</div>').join("");
+    return '<article class="board"><h2>'+title+'</h2><div class="grid">'+cells+'</div></article>';
+  }).join("");
+  const html='<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>בינגו '+escapeHtml(topic)+'</title><style>'+
+    'body{font-family:Arial,sans-serif;color:#111;margin:0;padding:14mm}.top{text-align:center;margin-bottom:12mm}.top button{font:bold 14pt Arial;padding:10px 18px}.board{max-width:185mm;margin:0 auto 12mm;break-inside:avoid;page-break-inside:avoid}.board h2{text-align:center;font-size:16pt;margin:0 0 5mm}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3mm}.cell{min-height:26mm;border:1px solid #555;display:grid;place-items:center;text-align:center;padding:2mm;font:bold 12pt Arial,sans-serif}@page{size:A4;margin:10mm}@media print{body{padding:0}.top button{display:none}.board{margin-bottom:8mm}.board:nth-of-type(2n){break-after:page;page-break-after:always}}'+
+    '</style></head><body><header class="top"><h1>בינגו '+escapeHtml(topic)+' — כל הלוחות</h1><button onclick="window.print()">הדפסת כל הלוחות</button><p>הקובץ כולל '+cards.length+' לוחות שונים, 4×4, בלי משבצת חופשית.</p></header>'+boardMarkup+'</body></html>';
+  const blob=new Blob([html],{type:"text/html;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  const slug=topic.replace(/[^A-Za-z0-9א-ת]+/g,"-").replace(/^-|-$/g,"")||"bingo";
+  link.href=url;
+  link.download="bingo-"+slug+"-"+cards.length+"-boards.html";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+  setStatus("הקובץ הורד. פתחו אותו ולחצו על ״הדפסת כל הלוחות״.");
 }
 $("#generate").addEventListener("click",generateBoards);
 $("#topic").addEventListener("keydown",event=>{if(event.key==="Enter")generateBoards()});
 boardPicker.addEventListener("change",showPlayer);
 $("#printOne").addEventListener("click",()=>print("print-one"));
 $("#printAll").addEventListener("click",()=>print("print-all"));
+$("#downloadAll").addEventListener("click",downloadAllBoards);
 </script>
 </body>
 </html>
