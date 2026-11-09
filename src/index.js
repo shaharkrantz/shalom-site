@@ -27,6 +27,26 @@ function isRateLimited(ip) {
   return bucket.count > MAX_REQUESTS_PER_WINDOW;
 }
 
+function parseModelResponse(result) {
+  let payload = result?.response ?? result;
+  if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+    if (Array.isArray(payload.words)) return payload;
+    const message = payload.choices?.[0]?.message?.content;
+    if (typeof message === "string") payload = message;
+  }
+  if (typeof payload !== "string") throw new Error("AI response has an unexpected shape");
+
+  const clean = payload.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  try {
+    return JSON.parse(clean);
+  } catch {
+    const start = clean.indexOf("{");
+    const end = clean.lastIndexOf("}");
+    if (start >= 0 && end > start) return JSON.parse(clean.slice(start, end + 1));
+    throw new Error("AI response was not valid JSON");
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -74,37 +94,48 @@ export default {
         messages: [
           {
             role: "system",
-            content: "אתה מכין מילים למשחק בינגו לילדים בני 8 ו-10. החזר JSON בלבד במבנה {\"words\":[...]}. כתוב בעברית. צור בדיוק 40 מילים קצרות, שונות זו מזו, ידידותיות לילדים, ומדויקות בנושא שניתן. השתמש במושגים, דמויות, מקומות וחפצים הקשורים ישירות לנושא. אל תוסיף הסברים, סימני ניקוד, מספרים או תוכן אחר.",
+            content: "אתה מכין מילים למשחק בינגו לילדים בני 8 ו-10. כתוב בעברית. צור 40 מילים קצרות, שונות זו מזו, ידידותיות לילדים ומדויקות לנושא. השתמש במושגים, דמויות, מקומות וחפצים הקשורים ישירות לנושא. החזר רק JSON עם שדה words שהוא מערך של מחרוזות. אל תוסיף הסברים או תוכן אחר.",
           },
           {
             role: "user",
             content: `צור רשימת מילים לבינגו בנושא: ${topic}`,
           },
         ],
-        response_format: { type: "json_object" },
-        max_tokens: 900,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            type: "object",
+            properties: {
+              words: { type: "array", items: { type: "string" }, minItems: 20, maxItems: 40 },
+            },
+            required: ["words"],
+            additionalProperties: false,
+          },
+        },
+        max_tokens: 1200,
         temperature: 0.5,
       });
 
-      const raw = typeof result?.response === "string" ? result.response : "";
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed.words)) throw new Error("Missing words");
+      const parsed = parseModelResponse(result);
+      if (!Array.isArray(parsed.words)) throw new Error("AI response has no words array");
+
       const seen = new Set();
       const words = [];
       for (const item of parsed.words) {
-        if (typeof item !== "string") continue;
-        const word = item.trim().replace(/\s+/g, " ");
+        const candidate = typeof item === "string" ? item : item?.word ?? item?.term;
+        if (typeof candidate !== "string") continue;
+        const word = candidate.trim().replace(/\s+/g, " ");
         const key = word.toLocaleLowerCase("he");
         if (word.length < 2 || word.length > 48 || seen.has(key)) continue;
         seen.add(key);
         words.push(word);
       }
-      if (words.length < 20) throw new Error("Not enough words");
+      if (words.length < 20) throw new Error("AI returned fewer than 20 usable words");
       return json({ topic, words: words.slice(0, 40), players });
     } catch (error) {
       console.error("Bingo AI generation failed:", error?.message || "unknown error");
       return json(
-        { error: "הבינה המלאכותית לא הצליחה להכין מספיק מילים הפעם. נסו שוב או בחרו נושא אחר." },
+        { error: "הבינה המלאכותית לא הצליחה ליצור רשימת מילים תקינה. נסו שוב בעוד רגע." },
         502,
       );
     }
