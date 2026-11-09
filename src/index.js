@@ -13,7 +13,7 @@ const KORACH_WORDS = [
 ];
 
 function isKorachTopic(topic) {
-  const normalized = topic.toLocaleLowerCase("he").replace(/[\\s׳״'"-]/g, "");
+  const normalized = topic.toLocaleLowerCase("he").replace(/[\s׳״'"-]/g, "");
   return normalized === "קורח" || normalized === "קרח" ||
     normalized === "פרשתקורח" || normalized === "פרשתקרח";
 }
