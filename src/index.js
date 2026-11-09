@@ -2,6 +2,21 @@ const MODEL = "@cf/zai-org/glm-4.7-flash";
 const recentRequests = new Map();
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 4;
+const KORACH_WORDS = [
+  "קורח", "משה", "אהרן", "דתן", "אבירם", "און בן פלת", "לויים",
+  "שבט לוי", "שבט ראובן", "נשיאים", "עדת ישראל", "אוהל מועד",
+  "פתח אוהל מועד", "מחתה", "מחתות", "קטורת", "אש", "מאתיים וחמישים איש",
+  "מטה", "מטה אהרן", "שנים עשר מטות", "מטה פורח", "שקד", "פרח",
+  "ניצן", "אדמה", "האדמה נפתחה", "מגפה", "אהרן עוצר את המגפה",
+  "משכן", "מעשר", "תרומה", "מתנות כהונה", "בכורות", "עבודת הלויים",
+  "מעשר מן המעשר", "שומרי המשכן", "בני ישראל",
+];
+
+function isKorachTopic(topic) {
+  const normalized = topic.toLocaleLowerCase("he").replace(/[\\s׳״'"-]/g, "");
+  return normalized === "קורח" || normalized === "קרח" ||
+    normalized === "פרשתקורח" || normalized === "פרשתקרח";
+}
 
 function json(data, status = 200) {
   return Response.json(data, {
@@ -84,6 +99,9 @@ export default {
     }
     if (!Number.isInteger(players) || players < 1 || players > 50) {
       return json({ error: "אפשר לבחור בין שחקן אחד ל־50 שחקנים." }, 400);
+    }
+    if (isKorachTopic(topic)) {
+      return json({ topic, words: KORACH_WORDS, players });
     }
     if (!env.AI) {
       return json({ error: "חיבור הבינה המלאכותית עדיין לא הופעל ב־Cloudflare." }, 503);
