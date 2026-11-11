@@ -20,22 +20,43 @@ header{padding:26px 18px 8px;text-align:center}h1{font-size:clamp(2rem,5vw,3.2re
 <article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="18,96 132,96 105,18" fill="#b9dcff" stroke="#2266d1" stroke-width="4"/><path d="M117 96v-14h15" fill="none" stroke="#e34c65" stroke-width="3"/></svg><h3>משולש ישר זווית</h3><p>יש בו זווית אחת של <b>90°</b>, כמו פינת ספר.</p></article>
 <article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="15,95 135,95 75,53" fill="#ffe8a6" stroke="#d99c00" stroke-width="4"/><path d="M28 86 A18 18 0 0 1 42 83" fill="none" stroke="#e34c65" stroke-width="3"/></svg><h3>משולש קהה זווית</h3><p>יש בו זווית אחת <b>גדולה מ־90°</b> — היא נפתחת רחב.</p></article>
 <article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="75,12 20,98 130,98" fill="#d8f5e6" stroke="#25966c" stroke-width="4"/><path d="M45 58l9 6M96 64l9-6" stroke="#25966c" stroke-width="3"/></svg><h3>משולש שווה שוקיים</h3><p>יש בו <b>שתי צלעות שוות</b> באורכן.</p></article>
-<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="22,96 128,96 67,20" fill="#f4d9ff" stroke="#9b56b5" stroke-width="4"/><path d="M54 56l8 7M94 75l-2 10M74 96l1-9" stroke="#9b56b5" stroke-width="3"/></svg><h3>משולש שווה צלעות</h3><p>כל <b>שלוש הצלעות שוות</b>, וכל הזוויות 60°.</p></article></div><p class="badge">💡 טיפ: סכום הזוויות בכל משולש הוא תמיד 180°!</p></section>
+<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="22,96 128,96 67,20" fill="#f4d9ff" stroke="#9b56b5" stroke-width="4"/><path d="M54 56l8 7M94 75l-2 10M74 96l1-9" stroke="#9b56b5" stroke-width="3"/></svg><h3>משולש שווה צלעות</h3><p>כל <b>שלוש הצלעות שוות</b>, וכל הזוויות 60°.</p></article></div><p class="badge">💡 טיפ: סכום הזוויות בכל משולש הוא תמיד 180°!</p>
+<h2>עוד קצת אתגר 🧠</h2>
+<div class="grid">
+<article class="card"><h3>משולש חד זוויות</h3><p>כל שלוש הזוויות שלו קטנות מ־90°. הן יכולות להיות שונות זו מזו, אבל יחד הן תמיד 180°.</p></article>
+<article class="card"><h3>משפט אי־שוויון המשולש</h3><p>כדי ששלושה קטעים יוכלו ליצור משולש, סכום האורכים של כל שתי צלעות חייב להיות גדול מאורך הצלע השלישית. למשל, 2, 3 ו־6 לא יוצרים משולש.</p></article>
+<article class="card"><h3>זוויות וצלעות קשורות</h3><p>במשולש שווה שוקיים זוויות הבסיס שוות. במשולש שווה צלעות כל הזוויות שוות, ולכן כל אחת מהן 60°.</p></article>
+<article class="card"><h3>אפשר למיין בשתי דרכים</h3><p>אותו משולש יכול לקבל שם לפי הזוויות וגם לפי הצלעות, למשל: ישר זווית ושווה שוקיים. אלה שתי דרכי מיון שונות.</p></article>
+</div></section>
 <section id="quiz" class="panel hidden"><div class="quiz"><div class="score" id="score">ניקוד: 0</div><div id="qcount"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><button class="primary hidden" id="next">לשאלה הבאה ←</button></div></section>
 <section id="draw" class="panel hidden lesson"><h2>מעבדת צורות 🧪</h2><p>בחרו תכונה וגלו איזה משולש מתאים לה:</p><div class="grid"><button onclick="lab('זווית אחת בדיוק של 90°','משולש ישר זווית')">יש זווית של 90°</button><button onclick="lab('זווית אחת גדולה מ־90°','משולש קהה זווית')">יש זווית קהה</button><button onclick="lab('שתי צלעות שוות','משולש שווה שוקיים')">שתי צלעות שוות</button><button onclick="lab('שלוש צלעות שוות','משולש שווה צלעות')">שלוש צלעות שוות</button></div><p id="labresult" class="badge">לחצו על תכונה כדי לחשוף את שם המשולש.</p></section>
 <footer>כל הכבוד חוקרי הגיאומטריה! 🌟</footer></main>
 <script>
 const tabs=[...document.querySelectorAll('.tab')];tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.toggle('active',x===b));['learn','quiz','draw'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==b.dataset.view))});
 function lab(a,b){document.getElementById('labresult').textContent=a+' → '+b}
-const qs=[
+const questionPool=[
 {q:'למשולש יש זווית אחת של 90°. איך קוראים לו?',a:['משולש ישר זווית','משולש קהה זווית','משולש שווה צלעות','עיגול'],c:0},
 {q:'איזה משולש כולל זווית שגדולה מ־90°?',a:['שווה צלעות','קהה זווית','ישר זווית','שווה שוקיים'],c:1},
 {q:'במשולש שווה שוקיים…',a:['כל הצלעות שונות','יש שתי צלעות שוות','יש ארבע צלעות','כל הזוויות 90°'],c:1},
 {q:'כמה מעלות יש בסכום הזוויות של כל משולש?',a:['90°','180°','270°','360°'],c:1},
-{q:'במשולש שווה צלעות…',a:['שלוש הצלעות שוות','רק צלע אחת שווה','יש זווית של 90°','יש לו שתי צלעות'],c:0}
-];let qi=0,points=0,locked=false;const question=document.getElementById('question'), answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next');
-function showQ(){locked=false;feedback.textContent='';next.classList.add('hidden');document.getElementById('qcount').textContent='שאלה '+(qi+1)+' מתוך '+qs.length;question.textContent=qs[qi].q;answers.innerHTML='';qs[qi].a.forEach((v,i)=>{let b=document.createElement('button');b.textContent=v;b.onclick=()=>answer(i);answers.appendChild(b)})}
-function answer(i){if(locked)return;locked=true;if(i===qs[qi].c){points++;feedback.textContent='נכון מאוד! 🎉';feedback.style.color='#16804e'}else{feedback.textContent='כמעט! התשובה הנכונה: '+qs[qi].a[qs[qi].c];feedback.style.color='#b84a55'}document.getElementById('score').textContent='ניקוד: '+points;[...answers.children].forEach(x=>x.disabled=true);next.classList.remove('hidden');next.textContent=qi===qs.length-1?'לסיכום ⭐':'לשאלה הבאה ←'}
-next.onclick=()=>{qi++;if(qi<qs.length)showQ();else{question.textContent='סיימתם! קיבלתם '+points+' מתוך '+qs.length+' נקודות. 🌟';document.getElementById('qcount').textContent='';answers.innerHTML='';feedback.textContent='';next.textContent='לשחק שוב';next.onclick=()=>{qi=0;points=0;document.getElementById('score').textContent='ניקוד: 0';showQ()}}};showQ();
+{q:'במשולש שווה צלעות…',a:['שלוש הצלעות שוות','רק צלע אחת שווה','יש זווית של 90°','יש לו שתי צלעות'],c:0},
+{q:'איך נקרא משולש שכל הזוויות שלו קטנות מ־90°?',a:['חד זוויות','קהה זווית','ישר זווית','שווה צלעות'],c:0},
+{q:'האם משולש יכול להכיל שתי זוויות ישרות?',a:['כן, תמיד','כן, אם הצלעות שוות','לא, כי סכום הזוויות יהיה לפחות 180° ועוד זווית','רק אם הוא קהה זווית'],c:2},
+{q:'האם אורכי צלעות 2, 3 ו־6 יכולים ליצור משולש?',a:['כן','לא, כי 2 ועוד 3 קטן מ־6','כן, אם הוא ישר זווית','רק אם הוא שווה שוקיים'],c:1},
+{q:'במשולש שווה שוקיים, מה נכון לגבי זוויות הבסיס?',a:['הן שוות','אחת מהן תמיד 90°','הן תמיד 60°','הן תמיד קהות'],c:0},
+{q:'במשולש ישר זווית, אם אחת הזוויות היא 90° והשנייה 35°, מה השלישית?',a:['35°','45°','55°','90°'],c:2},
+{q:'משולש שאורכי צלעותיו 5, 5 ו־8 הוא…',a:['שווה שוקיים','שווה צלעות','קהה בהכרח','לא יכול להיות משולש'],c:0},
+{q:'כמה מעלות יש בכל אחת מזוויות משולש שווה צלעות?',a:['30°','45°','60°','90°'],c:2},
+{q:'אפשר למיין אותו משולש גם לפי הצלעות וגם לפי הזוויות?',a:['לא, בוחרים רק דרך אחת','כן, אלה שתי תכונות שונות','רק במשולש שווה צלעות','רק במשולש קהה'],c:1},
+{q:'במשולש יש זוויות 110° ו־40°. מה גודל הזווית השלישית?',a:['20°','30°','40°','70°'],c:1},
+{q:'איזו קבוצת אורכים יכולה ליצור משולש?',a:['2, 3, 6','3, 4, 7','4, 5, 6','1, 2, 4'],c:2}
+];
+let qi=0,points=0,locked=false,currentQs=[],previousOrder='';
+const question=document.getElementById('question'), answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next');
+function startGame(){currentQs=[...questionPool];for(let i=currentQs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[currentQs[i],currentQs[j]]=[currentQs[j],currentQs[i]]}currentQs=currentQs.slice(0,10);let order=currentQs.map(x=>x.q).join('|');if(order===previousOrder)[currentQs[0],currentQs[1]]=[currentQs[1],currentQs[0]];previousOrder=currentQs.map(x=>x.q).join('|');qi=0;points=0;document.getElementById('score').textContent='ניקוד: 0';showQ()}
+function showQ(){locked=false;feedback.textContent='';next.classList.add('hidden');document.getElementById('qcount').textContent='שאלה '+(qi+1)+' מתוך '+currentQs.length;question.textContent=currentQs[qi].q;answers.innerHTML='';currentQs[qi].a.forEach((v,i)=>{let b=document.createElement('button');b.textContent=v;b.onclick=()=>answer(i);answers.appendChild(b)})}
+function answer(i){if(locked)return;locked=true;if(i===currentQs[qi].c){points++;feedback.textContent='נכון מאוד! 🎉';feedback.style.color='#16804e'}else{feedback.textContent='כמעט! התשובה הנכונה: '+currentQs[qi].a[currentQs[qi].c];feedback.style.color='#b84a55'}document.getElementById('score').textContent='ניקוד: '+points;[...answers.children].forEach(x=>x.disabled=true);next.classList.remove('hidden');next.textContent=qi===currentQs.length-1?'לסיכום ⭐':'לשאלה הבאה ←'}
+next.onclick=()=>{qi++;if(qi<currentQs.length)showQ();else{question.textContent='סיימתם! קיבלתם '+points+' מתוך '+currentQs.length+' נקודות. 🌟';document.getElementById('qcount').textContent='';answers.innerHTML='';feedback.textContent='';next.textContent='לשחק שוב';next.onclick=startGame}};startGame();
 </script></body></html>
+
 
