@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3055c8">
+<title>חידון פרשת קורח</title>
+<style>
+:root{--ink:#203149;--blue:#3055c8;--purple:#7250bf;--paper:#fffefa;--line:#dce4f1;--green:#17643b}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(145deg,#e9f5ff,#fff4d5);color:var(--ink);font-family:Arial,sans-serif;line-height:1.6}
+.wrap{max-width:780px;margin:auto;padding:22px 16px 50px}
+.hero{background:linear-gradient(120deg,var(--blue),var(--purple));color:white;border-radius:25px;text-align:center;padding:27px 20px;box-shadow:0 12px 28px #20314920}
+.emoji{font-size:42px}.hero h1{font-size:clamp(2rem,6vw,3rem);line-height:1.15;margin:2px 0}.hero p{margin:8px auto 0;max-width:620px;font-size:1.06rem}
+.panel{background:var(--paper);border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 8px 22px #20314910}
+.top{display:flex;justify-content:space-between;gap:12px;color:#52617a;font-weight:bold}
+.progressbar{height:12px;background:#e9edf5;border-radius:20px;overflow:hidden;margin:8px 0 18px}.fill{height:100%;width:0;background:linear-gradient(90deg,#48a876,#3055c8);transition:width .25s}
+h2{margin:0 0 14px;font-size:1.45rem}
+.answers{display:grid;gap:10px}
+.answer{font:inherit;text-align:right;border:2px solid var(--line);border-radius:13px;background:white;padding:13px 15px;color:var(--ink);cursor:pointer}
+.answer:hover:not(:disabled){border-color:#8297d5;background:#f6f8ff}
+.answer.selected{border-color:var(--blue);background:#edf1ff}
+.answer.correct{border-color:#55a876;background:#e5f7ec;color:#145b34}
+.answer.wrong{border-color:#d77d75;background:#fff0ee;color:#873a32}
+.action{font:inherit;font-weight:bold;border:0;border-radius:11px;padding:11px 17px;cursor:pointer;background:#e8edff;color:#2e4383}
+.action.primary{background:var(--blue);color:white}
+.action:disabled{opacity:.55;cursor:not-allowed}
+.controls{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.status{text-align:center;min-height:1.7em;font-weight:bold;color:var(--green)}
+.result{text-align:center;font-size:1.1rem}.score{font-size:2.6rem;color:var(--blue);font-weight:bold}
+.hidden{display:none!important}
+a{color:var(--blue)}
+@media(max-width:520px){.wrap{padding:13px 9px 32px}.panel{padding:16px}.controls{flex-direction:column-reverse}.controls button{width:100%}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero"><div class="emoji">📜❓</div><h1>חידון פרשת קורח</h1><p>בואו לבדוק מה אתם זוכרים! בחרו תשובה לכל שאלה, ובסוף תגלו כמה הצלחתם.</p></header>
+<section class="panel" id="quiz">
+<div class="top"><span id="counter">שאלה 1 מתוך 10</span><span id="points">ניקוד: 0</span></div>
+<div class="progressbar" aria-label="התקדמות בחידון"><div class="fill" id="fill"></div></div>
+<h2 id="question"></h2>
+<div class="answers" id="answers"></div>
+<p class="status" id="feedback" aria-live="polite"></p>
+<div class="controls"><button class="action" id="back" type="button">הקודם</button><button class="action primary" id="next" type="button" disabled>הבא</button></div>
+</section>
+<section class="panel result hidden" id="result" aria-live="polite">
+<div class="emoji">🏆</div><h2>סיימתם את החידון!</h2><div class="score" id="score"></div><p id="message"></p>
+<button class="action primary" id="again" type="button">לשחק שוב</button>
+</section>
+<p style="text-align:center"><a href="../korach-bingo/">חזרה לבינגו</a></p>
+</main>
+<script>
+const questions=[
+ {q:"מי היה קורח?",a:["בן לוי ממשפחת קהת","מלך מצרים","אחיו של יהושע"],c:0},
+ {q:"מי הצטרפו לקורח במחלוקת?",a:["דָּתָן ואֲבִירָם","אהרון ופינחס","נח ובניו"],c:0},
+ {q:"כמה אנשים הביאו מחתות עם קטורת?",a:["12","70","250"],c:2},
+ {q:"מה אמרו קורח ועדתו למשה ולאהרון?",a:["למה אין לנו מים?","כל העדה קדושים, ומדוע תתנשאו?","שלחו אותנו לארץ מצרים"],c:1},
+ {q:"מה ביקש משה מהאנשים לעשות עם המחתות?",a:["למלא אותן קטורת ולהביא אותן","למלא אותן במים","להניח אותן באוהל"],c:0},
+ {q:"מה קרה לאדמה ליד אוהלי דתן ואבירם?",a:["היא התמלאה פרחים","היא נבקעה ובלעה אותם","היא הפכה לנהר"],c:1},
+ {q:"מה קרה ל-250 האנשים שהקריבו קטורת?",a:["הם קיבלו מתנות","אש יצאה מאת ה׳ ואכלה אותם","הם הפליגו בספינה"],c:1},
+ {q:"איזה מטה פרח והוציא שקדים?",a:["המטה של משה","המטה של אהרון","המטה של יהושע"],c:1},
+ {q:"מה הראה המטה הפורח?",a:["שאהרון נבחר לכהן","שצריך לצאת למסע","שהגיע זמן הקציר"],c:0},
+ {q:"מאיזה שבט היה קורח?",a:["שבט יהודה","שבט לוי","שבט בנימין"],c:1}
+];
+let index=0;let score=0;let chosen=Array(questions.length).fill(null);
+const $=s=>document.querySelector(s);
+function render(){
+ const item=questions[index],answers=$("#answers");
+ $("#counter").textContent="שאלה "+(index+1)+" מתוך "+questions.length;
+ $("#points").textContent="ניקוד: "+score;
+ $("#fill").style.width=((index/questions.length)*100)+"%";
+ $("#question").textContent=item.q;
+ $("#feedback").textContent="";
+ answers.replaceChildren();
+ item.a.forEach((text,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="answer";b.textContent=text;
+  if(chosen[index]===i)b.classList.add("selected");
+  b.addEventListener("click",()=>select(i));answers.append(b);
+ });
+ $("#back").disabled=index===0;
+ $("#next").disabled=chosen[index]===null;
+ $("#next").textContent=index===questions.length-1?"לתוצאה":"הבא";
+}
+function select(choice){
+ if(chosen[index]!==null)return;
+ chosen[index]=choice;
+ const correct=choice===questions[index].c;
+ if(correct)score++;
+ [...$("#answers").children].forEach((b,i)=>{
+  b.disabled=true;
+  if(i===questions[index].c)b.classList.add("correct");
+  else if(i===choice)b.classList.add("wrong");
+ });
+ $("#points").textContent="ניקוד: "+score;
+ $("#feedback").textContent=correct?"תשובה נכונה! כל הכבוד!":"כמעט! התשובה הנכונה מסומנת בירוק.";
+ $("#next").disabled=false;
+}
+$("#back").addEventListener("click",()=>{if(index>0){index--;render()}});
+$("#next").addEventListener("click",()=>{
+ if(chosen[index]===null)return;
+ if(index<questions.length-1){index++;render();return}
+ $("#quiz").classList.add("hidden");$("#result").classList.remove("hidden");
+ $("#fill").style.width="100%";$("#score").textContent=score+" מתוך "+questions.length;
+ $("#message").textContent=score===questions.length?"מדהים! עניתם נכון על כל השאלות!":score>=7?"כל הכבוד! אתם מכירים היטב את הפרשה.":score>=4?"יפה! עכשיו אפשר לקרוא שוב ולנסות לשפר.":"תודה ששיחקתם! נסו שוב כדי לזכור עוד פרטים.";
+});
+$("#again").addEventListener("click",()=>{index=0;score=0;chosen=Array(questions.length).fill(null);$("#result").classList.add("hidden");$("#quiz").classList.remove("hidden");render()});
+render();
+</script>
+</body>
+</html>
