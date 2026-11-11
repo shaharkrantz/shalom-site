@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>הרפתקת המשולשים</title>
+<style>
+:root{--ink:#17324d;--blue:#2266d1;--mint:#dff7ee;--gold:#ffd166;--pink:#ff8fab;--paper:#f7fbff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eaf5ff,#fff8e8);font-family:Arial,"Noto Sans Hebrew",sans-serif;color:var(--ink);min-height:100vh}
+header{padding:26px 18px 8px;text-align:center}h1{font-size:clamp(2rem,5vw,3.2rem);margin:0;color:#164e9b}header p{font-size:1.15rem;margin:10px auto;max-width:700px}
+.wrap{max-width:1050px;margin:auto;padding:12px 18px 40px}.tabs{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0 20px}.tab,button{border:0;border-radius:14px;padding:12px 18px;font-size:1rem;font-weight:700;cursor:pointer;background:white;color:var(--ink);box-shadow:0 3px 10px #17324d18}.tab.active,button.primary{background:var(--blue);color:white}.panel{background:#ffffffd9;border:2px solid #d8e9ff;border-radius:24px;padding:clamp(18px,4vw,32px);box-shadow:0 12px 35px #164e9b12}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#f5faff;border-radius:18px;padding:16px;text-align:center;border:1px solid #e0edfa}.card h3{margin:8px 0;color:#164e9b}.shape{height:105px;width:145px;margin:8px auto;display:block}.badge{display:inline-block;background:var(--mint);padding:6px 12px;border-radius:20px;font-weight:bold}.lesson{line-height:1.65}
+.quiz{max-width:700px;margin:auto;text-align:center}.question{font-size:1.4rem;font-weight:bold;margin:12px}.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px auto}.answers button{border:2px solid #dbe9fa}.answers button:hover{border-color:var(--blue);transform:translateY(-2px)}.feedback{min-height:32px;font-weight:bold;font-size:1.1rem}.score{font-weight:bold;color:#164e9b}footer{text-align:center;margin:20px;color:#51708d}.hidden{display:none}
+@media(max-width:520px){.answers{grid-template-columns:1fr}.tab{padding:10px 12px}}
+</style></head>
+<body>
+<header><h1>🔺 הרפתקת המשולשים</h1><p>מגלים, לומדים ומשחקים עם משולשים! מוכנים להיות חוקרי גיאומטריה?</p></header>
+<main class="wrap">
+<nav class="tabs" aria-label="חלקי המשחק"><button class="tab active" data-view="learn">לומדים</button><button class="tab" data-view="quiz">חידון</button><button class="tab" data-view="draw">מעבדת צורות</button></nav>
+<section id="learn" class="panel lesson"><h2>איזה משולש מסתתר כאן?</h2><p>לכל משולש יש <b>3 צלעות</b> ו־<b>3 זוויות</b>. אפשר למיין משולשים לפי הזוויות או לפי אורכי הצלעות.</p><div class="grid">
+<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="18,96 132,96 105,18" fill="#b9dcff" stroke="#2266d1" stroke-width="4"/><path d="M117 96v-14h15" fill="none" stroke="#e34c65" stroke-width="3"/></svg><h3>משולש ישר זווית</h3><p>יש בו זווית אחת של <b>90°</b>, כמו פינת ספר.</p></article>
+<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="15,95 135,95 75,53" fill="#ffe8a6" stroke="#d99c00" stroke-width="4"/><path d="M28 86 A18 18 0 0 1 42 83" fill="none" stroke="#e34c65" stroke-width="3"/></svg><h3>משולש קהה זווית</h3><p>יש בו זווית אחת <b>גדולה מ־90°</b> — היא נפתחת רחב.</p></article>
+<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="75,12 20,98 130,98" fill="#d8f5e6" stroke="#25966c" stroke-width="4"/><path d="M45 58l9 6M96 64l9-6" stroke="#25966c" stroke-width="3"/></svg><h3>משולש שווה שוקיים</h3><p>יש בו <b>שתי צלעות שוות</b> באורכן.</p></article>
+<article class="card"><svg class="shape" viewBox="0 0 150 110"><polygon points="22,96 128,96 67,20" fill="#f4d9ff" stroke="#9b56b5" stroke-width="4"/><path d="M54 56l8 7M94 75l-2 10M74 96l1-9" stroke="#9b56b5" stroke-width="3"/></svg><h3>משולש שווה צלעות</h3><p>כל <b>שלוש הצלעות שוות</b>, וכל הזוויות 60°.</p></article></div><p class="badge">💡 טיפ: סכום הזוויות בכל משולש הוא תמיד 180°!</p></section>
+<section id="quiz" class="panel hidden"><div class="quiz"><div class="score" id="score">ניקוד: 0</div><div id="qcount"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><button class="primary hidden" id="next">לשאלה הבאה ←</button></div></section>
+<section id="draw" class="panel hidden lesson"><h2>מעבדת צורות 🧪</h2><p>בחרו תכונה וגלו איזה משולש מתאים לה:</p><div class="grid"><button onclick="lab('זווית אחת בדיוק של 90°','משולש ישר זווית')">יש זווית של 90°</button><button onclick="lab('זווית אחת גדולה מ־90°','משולש קהה זווית')">יש זווית קהה</button><button onclick="lab('שתי צלעות שוות','משולש שווה שוקיים')">שתי צלעות שוות</button><button onclick="lab('שלוש צלעות שוות','משולש שווה צלעות')">שלוש צלעות שוות</button></div><p id="labresult" class="badge">לחצו על תכונה כדי לחשוף את שם המשולש.</p></section>
+<footer>כל הכבוד חוקרי הגיאומטריה! 🌟</footer></main>
+<script>
+const tabs=[...document.querySelectorAll('.tab')];tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.toggle('active',x===b));['learn','quiz','draw'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==b.dataset.view))});
+function lab(a,b){document.getElementById('labresult').textContent=a+' → '+b}
+const qs=[
+{q:'למשולש יש זווית אחת של 90°. איך קוראים לו?',a:['משולש ישר זווית','משולש קהה זווית','משולש שווה צלעות','עיגול'],c:0},
+{q:'איזה משולש כולל זווית שגדולה מ־90°?',a:['שווה צלעות','קהה זווית','ישר זווית','שווה שוקיים'],c:1},
+{q:'במשולש שווה שוקיים…',a:['כל הצלעות שונות','יש שתי צלעות שוות','יש ארבע צלעות','כל הזוויות 90°'],c:1},
+{q:'כמה מעלות יש בסכום הזוויות של כל משולש?',a:['90°','180°','270°','360°'],c:1},
+{q:'במשולש שווה צלעות…',a:['שלוש הצלעות שוות','רק צלע אחת שווה','יש זווית של 90°','יש לו שתי צלעות'],c:0}
+];let qi=0,points=0,locked=false;const question=document.getElementById('question'), answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next');
+function showQ(){locked=false;feedback.textContent='';next.classList.add('hidden');document.getElementById('qcount').textContent='שאלה '+(qi+1)+' מתוך '+qs.length;question.textContent=qs[qi].q;answers.innerHTML='';qs[qi].a.forEach((v,i)=>{let b=document.createElement('button');b.textContent=v;b.onclick=()=>answer(i);answers.appendChild(b)})}
+function answer(i){if(locked)return;locked=true;if(i===qs[qi].c){points++;feedback.textContent='נכון מאוד! 🎉';feedback.style.color='#16804e'}else{feedback.textContent='כמעט! התשובה הנכונה: '+qs[qi].a[qs[qi].c];feedback.style.color='#b84a55'}document.getElementById('score').textContent='ניקוד: '+points;[...answers.children].forEach(x=>x.disabled=true);next.classList.remove('hidden');next.textContent=qi===qs.length-1?'לסיכום ⭐':'לשאלה הבאה ←'}
+next.onclick=()=>{qi++;if(qi<qs.length)showQ();else{question.textContent='סיימתם! קיבלתם '+points+' מתוך '+qs.length+' נקודות. 🌟';document.getElementById('qcount').textContent='';answers.innerHTML='';feedback.textContent='';next.textContent='לשחק שוב';next.onclick=()=>{qi=0;points=0;document.getElementById('score').textContent='ניקוד: 0';showQ()}}};showQ();
+</script></body></html>
+
