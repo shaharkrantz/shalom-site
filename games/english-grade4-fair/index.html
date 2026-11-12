@@ -14,7 +14,7 @@
 <section class="play-area">
 <div class="name-row"><label for="playerName">שם השחקן/ית:</label><input id="playerName" maxlength="18" placeholder="לדוגמה: נועה" autocomplete="nickname"></div>
 <div class="time-row"><span id="timer" class="timer">⏱️ 0 שניות</span><span>בשוויון בניקוד, הזמן הקצר מנצח</span></div><div class="progress"><div class="bar" id="bar"></div></div>
-<section id="game"><div class="question"><div class="prompt">מה פירוש המילה באנגלית?</div><div class="word" id="word"></div></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><button class="next" id="next" disabled>לשאלה הבאה ←</button></section>
+<section id="game"><div class="result"><p>כתבו את שם השחקן/ית ולחצו להתחיל. השעון יתחיל רק אז ⏱️</p><button class="next" id="startGame">להתחיל את המשחק 🎮</button></div></section>
 </section>
 <aside class="leaderboard"><h2>🏆 עשרת המובילים</h2><p class="hint">קודם לפי ניקוד, ואז לפי זמן</p><div id="leaderboardList"></div></aside>
 </div><div class="footer">השאלות מתחלפות בכל משחק • השיאים נשמרים בדפדפן הזה</div>
@@ -36,8 +36,10 @@ function render(){locked=false;$('feedback').textContent='';$('next').disabled=t
 function choose(btn,v){if(locked)return;locked=true;document.querySelectorAll('.answer').forEach(b=>{b.disabled=true;if(b.textContent===round[index][1])b.classList.add('good')});if(v===round[index][1]){points++;$('feedback').textContent='כל הכבוד! תשובה נכונה 🎉'}else{$('feedback').textContent='כמעט! התשובה הנכונה מסומנת בירוק 💚'}$('score').textContent='⭐ '+points;$('next').disabled=false}
 function next(){index++;if(index===roundSize){finish();return}render()}
 function finish(){finalSeconds=Math.max(1,Math.floor((Date.now()-startAt)/1000));if(timerHandle)clearInterval(timerHandle);$('timer').textContent='⏱️ '+formatTime(finalSeconds);saveScore(finalSeconds);$('bar').style.width='100%';$('game').innerHTML='<div class="result"><div class="emoji">'+(points>=8?'🏆':'🌟')+'</div><h2>סיימתם את המסע!</h2><p>עניתם נכון על <b>'+points+'</b> מתוך '+roundSize+' שאלות.</p><p>הזמן שלכם: <b>'+formatTime(finalSeconds)+'</b></p><button class="next" id="playAgain">למשחק חדש עם שאלות אחרות 🔄</button></div>';$('playAgain').onclick=startGame}
-$('next').onclick=next;showLeaders();startGame();
+showLeaders();$('startGame').onclick=startGame;
 </script></body></html>
+
+
 
 
 
